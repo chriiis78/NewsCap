@@ -14,8 +14,8 @@ import UIKit
 
 protocol ListArticlePresentationLogic
 {
-    func presentFetchListArticle(response: ListArticle.Fetch.Response)
-    func presentFetchListArticleImage(response: ListArticle.FetchImage.Response)
+    func presentArticles(response: ListArticle.Fetch.Response)
+    func presentArticleImage(response: ListArticle.FetchImage.Response)
 }
 
 class ListArticlePresenter: ListArticlePresentationLogic
@@ -24,7 +24,7 @@ class ListArticlePresenter: ListArticlePresentationLogic
     
     // MARK: Do something
     
-    func presentFetchListArticle(response: ListArticle.Fetch.Response)
+    func presentArticles(response: ListArticle.Fetch.Response)
     {
         var displayArticles = [ListArticle.Fetch.ViewModel.DisplayArticle]()
         
@@ -40,9 +40,9 @@ class ListArticlePresenter: ListArticlePresentationLogic
         viewController?.displayArticles(viewModel: viewModel)
     }
     
-    func presentFetchListArticleImage(response: ListArticle.FetchImage.Response) {
+    func presentArticleImage(response: ListArticle.FetchImage.Response) {
         
-        let viewModel = ListArticle.FetchImage.ViewModel(imageUrl: response.imageUrl ?? "", image: response.image)
+        let viewModel = ListArticle.FetchImage.ViewModel(index: response.index, image: response.image)
         
         viewController?.displayArticleImage(viewModel: viewModel)
     }

@@ -71,10 +71,8 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        doSomething()
-        
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 270
+        setupUI()
+        fetchArticles()
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -83,36 +81,29 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
-    // MARK: Do something
+    // MARK: List Article
+    func setupUI() {
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 270
+    }
     
-    //@IBOutlet weak var nameTextField: UITextField!
     var displayArticles = [ListArticle.Fetch.ViewModel.DisplayArticle]()
     
-    func doSomething()
+    func fetchArticles()
     {
         let request = ListArticle.Fetch.Request()
-        interactor?.fetchListArticle(request: request)
+        interactor?.fetchArticles(request: request)
     }
     
     func displayArticles(viewModel: ListArticle.Fetch.ViewModel)
     {
         displayArticles = viewModel.DisplayArticles
         tableView.reloadData()
-        for article in displayArticles {
-            let request = ListArticle.FetchImage.Request(url: article.imageUrl)
-            interactor?.fetchListArticleImage(request: request)
-        }
     }
     
     func displayArticleImage(viewModel: ListArticle.FetchImage.ViewModel) {
-        var indexPaths: [IndexPath] = []
-        for index in displayArticles.indices {
-            if displayArticles[index].imageUrl != "" && displayArticles[index].imageUrl == viewModel.imageUrl {
-                let indexPath = IndexPath(item: index, section: 0)
-                indexPaths.append(indexPath)
-                displayArticles[index].image = viewModel.image
-            }
-        }
+        let indexPaths = [IndexPath(item: viewModel.index, section: 0)]
+        displayArticles[viewModel.index].image = viewModel.image
         tableView.reloadRows(at: indexPaths, with: .none)
     }
     

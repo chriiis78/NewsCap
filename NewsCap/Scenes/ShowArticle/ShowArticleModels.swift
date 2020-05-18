@@ -14,26 +14,44 @@ import UIKit
 
 enum ShowArticle
 {
-  // MARK: Use cases
-  
-  enum GetArticle
-  {
-    struct Request
+    // MARK: Use cases
+    
+    enum GetArticle
     {
+        struct Request
+        {
+        }
+        struct Response
+        {
+            var article: Article
+        }
+        struct ViewModel
+        {
+            var imageUrl: String?
+            var title: String
+            var publish: String
+            var author: String
+            var content: String
+            var source: String
+            var sourceURL: URL?
+        }
     }
-    struct Response
+    
+    enum FetchImage
     {
-        var article: Article
+        struct Request
+        {
+            var url: String
+        }
+        struct Response
+        {
+            var image: UIImage?
+            var isError: Bool
+            var message: String?
+        }
+        struct ViewModel
+        {
+            var image: UIImage?
+        }
     }
-    struct ViewModel
-    {
-        var image: UIImage?
-        var title: String
-        var publish: String
-        var author: String
-        var content: String
-        var source: String
-        var sourceURL: URL?
-    }
-  }
 }

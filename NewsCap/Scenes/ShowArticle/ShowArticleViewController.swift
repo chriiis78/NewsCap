@@ -15,6 +15,7 @@ import UIKit
 protocol ShowArticleDisplayLogic: class
 {
     func displayArticle(viewModel: ShowArticle.GetArticle.ViewModel)
+    func displayArticleImage(viewModel: ShowArticle.FetchImage.ViewModel)
 }
 
 class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic
@@ -75,12 +76,18 @@ class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        setupUI()
         fetchArticle()
     }
     
-    // MARK: Do something
+    // MARK: Show Article
     
-    //@IBOutlet weak var nameTextField: UITextField!
+    func setupUI() {
+        titleText.layer.shadowOpacity = 1.0
+        titleText.layer.shadowOffset = CGSize(width: 0, height: 0)
+        titleText.layer.shadowRadius = 10
+        titleText.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+    }
     
     func fetchArticle()
     {
@@ -90,11 +97,15 @@ class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic
     
     func displayArticle(viewModel: ShowArticle.GetArticle.ViewModel)
     {
-        articleImage.image = viewModel.image
         titleText.text = viewModel.title
         publishText.text = viewModel.publish
         authorText.text = viewModel.author
         contentText.text = viewModel.content
         sourceText.text = viewModel.source
+    }
+    
+    func displayArticleImage(viewModel: ShowArticle.FetchImage.ViewModel)
+    {
+        articleImage.image = viewModel.image
     }
 }

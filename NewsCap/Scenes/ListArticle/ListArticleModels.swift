@@ -46,18 +46,19 @@ enum ListArticle
     {
         struct Request
         {
+            var index: Int
             var url: String
         }
         struct Response
         {
-            var imageUrl: String?
+            var index: Int
             var image: UIImage?
             var isError: Bool
             var message: String?
         }
         struct ViewModel
         {
-            var imageUrl: String
+            var index: Int
             var image: UIImage?
         }
     }

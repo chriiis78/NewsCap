@@ -15,6 +15,7 @@ import UIKit
 protocol ShowArticlePresentationLogic
 {
     func presentArticle(response: ShowArticle.GetArticle.Response)
+    func presentArticleImage(response: ShowArticle.FetchImage.Response)
 }
 
 class ShowArticlePresenter: ShowArticlePresentationLogic
@@ -48,5 +49,12 @@ class ShowArticlePresenter: ShowArticlePresentationLogic
         
         let viewModel = ShowArticle.GetArticle.ViewModel(title: title, publish: date, author: author, content: content, source: source)
         viewController?.displayArticle(viewModel: viewModel)
+    }
+    
+    func presentArticleImage(response: ShowArticle.FetchImage.Response) {
+        
+        let viewModel = ShowArticle.FetchImage.ViewModel(image: response.image)
+        
+        viewController?.displayArticleImage(viewModel: viewModel)
     }
 }

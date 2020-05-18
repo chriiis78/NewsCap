@@ -39,34 +39,29 @@ class ArticlesWorker
             switch response.result {
             case .success:
                 let json = response.data!
-                print(String(data: json, encoding: .utf8)!)
                 var articleResult: ArticleResult
                 do {
                     articleResult = try decoder.decode(ArticleResult.self, from: json)
-                    
                     success(ArticlesModel.Fetch.Response(articles: articleResult.articles!, isError: false, message: nil))
                 } catch {
                     print(error.localizedDescription)
                     fail(ArticlesModel.Fetch.Response(articles: [], isError: true, message: error.localizedDescription))
                 }
-                
             case let .failure(error):
                 print(error)
                 fail(ArticlesModel.Fetch.Response(articles: [], isError: true, message: error.errorDescription))
             }
-            
         }
     }
     
-    func fetchImage(request: ListArticle.FetchImage.Request, success:@escaping(imageResponseHandler), fail:@escaping(imageResponseHandler)) {
+    func fetchImage(request: ArticlesModel.FetchImage.Request, success:@escaping(imageResponseHandler), fail:@escaping(imageResponseHandler)) {
         
-        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
-        let url = URL(fileURLWithPath: path)
-        let fileName = URL(fileURLWithPath: request.url).lastPathComponent
-        print("fileName \(fileName)")
-        let pathComponent = url.appendingPathComponent(fileName)
-        let filePath = pathComponent.path
         let fileManager = FileManager.default
+        let documentURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let pathComponent = documentURL.appendingPathComponent(request.url)
+        let filePath = pathComponent.path
+        print("fileName \(filePath)")
+        
         if fileManager.fileExists(atPath: filePath) {
             print("FILE AVAILABLE")
             if let image = UIImage(contentsOfFile: filePath) {
@@ -74,28 +69,23 @@ class ArticlesWorker
             } else {
                 fail(ArticlesModel.FetchImage.Response(isError: true, message: "no image found"))
             }
-            
         } else {
-            print("FILE NOT AVAILABLE")
+            print("DOWNLOAD FILE \(filePath)")
             
-            let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
+            let destination: DownloadRequest.Destination = { _, _ in
+                return (pathComponent, [.removePreviousFile, .createIntermediateDirectories])
+            }
             
             let requestImage = AF.download(request.url, to: destination)
             
-            requestImage.response { response in
-                print(response)
+            requestImage.responseData { response in
+                print("RESPONSE \(filePath)")
                 switch response.result {
                 case .success:
-                    if fileManager.fileExists(atPath: filePath) {
-                        print("FILE AVAILABLE")
-                        if let image = UIImage(contentsOfFile: filePath) {
-                            success(ArticlesModel.FetchImage.Response(imageUrl: request.url, image: image, isError: false))
-                        } else {
-                            fail(ArticlesModel.FetchImage.Response(isError: true, message: "no image found"))
-                        }
-                        
-                    }
+                    success(ArticlesModel.FetchImage.Response(imageUrl: request.url, image: UIImage(data: response.value!), isError: false))
                 case let .failure(error):
+                    print("ERROR")
+                    print(error.errorDescription.debugDescription)
                     fail(ArticlesModel.FetchImage.Response(isError: true, message: error.errorDescription))
                 }
             }
