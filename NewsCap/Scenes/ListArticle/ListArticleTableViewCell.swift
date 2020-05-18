@@ -12,6 +12,7 @@ class ListArticleTableViewCell: UITableViewCell {
 
     
     @IBOutlet weak var card: UIView!
+    @IBOutlet weak var cardContent: UIView!
     @IBOutlet weak var imageArticle: UIImageView!
     @IBOutlet weak var titleText: UITextView!
     @IBOutlet weak var descriptionText: UILabel!
@@ -26,8 +27,9 @@ class ListArticleTableViewCell: UITableViewCell {
         selectionStyle = .none
         card.layer.cornerRadius = 20
         card.layer.shadowOpacity = 1
-        card.layer.shadowOffset = CGSize(width: 1, height: 1)
-        card.layer.shadowColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        card.layer.shadowOffset = CGSize(width: 2, height: 2)
+        card.layer.shadowColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        cardContent.layer.cornerRadius = 20
         
         titleText.layer.shadowOpacity = 1.0
         titleText.layer.shadowOffset = CGSize(width: 0, height: 0)

@@ -87,6 +87,11 @@ class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic
         titleText.layer.shadowOffset = CGSize(width: 0, height: 0)
         titleText.layer.shadowRadius = 10
         titleText.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        
+        publishText.layer.shadowOpacity = 1.0
+        publishText.layer.shadowOffset = CGSize(width: 0, height: 0)
+        publishText.layer.shadowRadius = 3
+        publishText.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
     
     func fetchArticle()

@@ -31,7 +31,15 @@ class ListArticlePresenter: ListArticlePresentationLogic
         for article in response.articles {
             let imageUrl = article.urlToImage ?? ""
             let title = article.title ?? ""
-            let description = article.description ?? ""
+            
+            var description = ""
+            if let desc = article.description, !desc.isEmpty {
+                description = desc
+            }
+            else {
+                description = article.content ?? ""
+            }
+            
             let displayArticle = ListArticle.Fetch.ViewModel.DisplayArticle(imageUrl: imageUrl, title: title, description: description)
             displayArticles.append(displayArticle)
         }

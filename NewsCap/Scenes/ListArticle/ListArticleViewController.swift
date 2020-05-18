@@ -57,7 +57,6 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        print(segue.identifier!)
         if let scene = segue.identifier {
             let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
             if let router = router, router.responds(to: selector) {

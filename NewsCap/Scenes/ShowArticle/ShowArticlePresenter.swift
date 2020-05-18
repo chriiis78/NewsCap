@@ -24,10 +24,17 @@ class ShowArticlePresenter: ShowArticlePresentationLogic
     
     // MARK: Do something
     
-    var dateFormatter: DateFormatter {
+    var dayFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
+        dateFormatter.timeStyle = .none
+        return dateFormatter
+    }
+    
+    var timeFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .none
+        dateFormatter.timeStyle = .medium
         return dateFormatter
     }
     
@@ -41,13 +48,18 @@ class ShowArticlePresenter: ShowArticlePresentationLogic
     func presentArticle(response: ShowArticle.GetArticle.Response)
     {
         let title = response.article.title ?? ""
-        var date = dateFormatter.string(from: dateDeformatter.date(from: response.article.publishedAt!)!)
-        date = date.isEmpty ? "Publié le : \(date)" : ""
+        var publish = ""
+        if let date = response.article.publishedAt,
+            let deformattedDate = dateDeformatter.date(from: date) {
+            let day = dayFormatter.string(from: deformattedDate)
+            let time = timeFormatter.string(from: deformattedDate)
+            publish = "Publié le : \(day) à \(time)"
+        }
         let author = response.article.author.map { "Auteur : \($0)" } ?? ""
         let content = response.article.content ?? ""
         let source = response.article.source?.name.map { "Source : \($0)" } ?? ""
         
-        let viewModel = ShowArticle.GetArticle.ViewModel(title: title, publish: date, author: author, content: content, source: source)
+        let viewModel = ShowArticle.GetArticle.ViewModel(title: title, publish: publish, author: author, content: content, source: source)
         viewController?.displayArticle(viewModel: viewModel)
     }
     
