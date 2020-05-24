@@ -28,6 +28,8 @@ struct ArticlesModel
         struct Request
         {
             var url: String
+            var priority: Operation.QueuePriority = .normal
+            var download: Bool = true
         }
         struct Response
         {

@@ -14,6 +14,12 @@ typealias imageResponseHandler = (_ response:ArticlesModel.FetchImage.Response) 
 
 class ArticlesWorker
 {
+    var operationQueue = OperationQueue()
+    
+    init() {
+        operationQueue.maxConcurrentOperationCount = 1
+    }
+    
     func fetch(success:@escaping(responseHandler), fail:@escaping(responseHandler))
     {
         guard let api_url = Bundle.main.infoDictionary?["NEWSAPI_URL"] as? String,
@@ -69,26 +75,21 @@ class ArticlesWorker
             } else {
                 fail(ArticlesModel.FetchImage.Response(isError: true, message: "no image found"))
             }
-        } else {
+        } else if request.download {
             print("DOWNLOAD FILE \(filePath)")
             
-            let destination: DownloadRequest.Destination = { _, _ in
-                return (pathComponent, [.removePreviousFile, .createIntermediateDirectories])
-            }
-            
-            let requestImage = AF.download(request.url, to: destination)
-            
-            requestImage.responseData { response in
-                print("RESPONSE \(filePath)")
-                switch response.result {
-                case .success:
-                    success(ArticlesModel.FetchImage.Response(imageUrl: request.url, image: UIImage(data: response.value!), isError: false))
-                case let .failure(error):
-                    print("ERROR")
-                    print(error.errorDescription.debugDescription)
-                    fail(ArticlesModel.FetchImage.Response(isError: true, message: error.errorDescription))
+            let imageOperation = ImageOperation(url: request.url, path: pathComponent)
+            imageOperation.queuePriority = request.priority
+            imageOperation.completionBlock = {
+                print("completionBlock \(filePath)")
+                if let response = imageOperation.imageResponse {
+                    DispatchQueue.main.async {
+                        success(response)
+                    }
                 }
             }
+            operationQueue.addOperation(imageOperation)
+            
         }
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 
 class ListArticleTableViewCell: UITableViewCell {
-
+    
     
     @IBOutlet weak var card: UIView!
     @IBOutlet weak var cardContent: UIView!
@@ -35,19 +35,25 @@ class ListArticleTableViewCell: UITableViewCell {
         titleText.layer.shadowOffset = CGSize(width: 0, height: 0)
         titleText.layer.shadowRadius = 10
         titleText.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-
+        
     }
     
-    func setupData(data: ListArticle.Fetch.ViewModel.DisplayArticle) {
+    func setupData(data: ListArticle.Fetch.ViewModel.DisplayArticle, index: Int, interactor: ListArticleBusinessLogic?) {
         imageArticle.image = data.image
         titleText.text = data.title
         descriptionText.text = data.description
+        if let image = data.image {
+            imageArticle.image = image
+        } else {
+            let request = ListArticle.FetchImage.Request(index: index, url: data.imageUrl, download: false)
+            interactor?.fetchArticleImage(request: request)
+        }
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
+        
+        override func setSelected(_ selected: Bool, animated: Bool) {
+            super.setSelected(selected, animated: animated)
+            
+            // Configure the view for the selected state
+        }
+        
 }

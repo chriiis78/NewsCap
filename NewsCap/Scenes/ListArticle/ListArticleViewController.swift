@@ -80,6 +80,11 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+        tableView.reloadData()
+    }
+    
     // MARK: List Article
     func setupUI() {
         tableView.rowHeight = UITableView.automaticDimension
@@ -103,7 +108,7 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic
     func displayArticleImage(viewModel: ListArticle.FetchImage.ViewModel) {
         let indexPaths = [IndexPath(item: viewModel.index, section: 0)]
         displayArticles[viewModel.index].image = viewModel.image
-        tableView.reloadRows(at: indexPaths, with: .none)
+        tableView.reloadRows(at: indexPaths, with: .fade)
     }
     
     // MARK: - Table view data source
@@ -121,7 +126,7 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("cellForRowAt")
         let cell = tableView.dequeueReusableCell(withIdentifier: "listArticleCell", for: indexPath) as! ListArticleTableViewCell
-        cell.setupData(data: displayArticles[indexPath.row])
+        cell.setupData(data: displayArticles[indexPath.row], index: indexPath.row, interactor: interactor)
         return cell
     }
     

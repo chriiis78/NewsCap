@@ -45,7 +45,7 @@ class ShowArticleInteractor: ShowArticleBusinessLogic, ShowArticleDataStore
     
     func fetchArticleImage(request: ShowArticle.FetchImage.Request)
     {
-        let req = ArticlesModel.FetchImage.Request(url: request.url)
+        let req = ArticlesModel.FetchImage.Request(url: request.url, priority: .high)
         articlesWorker.fetchImage(request: req, success: { response in
             let resp = ShowArticle.FetchImage.Response(image: response.image, isError: response.isError)
             self.presenter?.presentArticleImage(response: resp)

@@ -48,6 +48,7 @@ enum ListArticle
         {
             var index: Int
             var url: String
+            var download: Bool = true
         }
         struct Response
         {

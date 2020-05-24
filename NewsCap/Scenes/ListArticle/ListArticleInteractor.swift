@@ -62,7 +62,7 @@ class ListArticleInteractor: ListArticleBusinessLogic, ListArticleDataStore
     
     func fetchArticleImage(request: ListArticle.FetchImage.Request)
     {
-        let req = ArticlesModel.FetchImage.Request(url: request.url)
+        let req = ArticlesModel.FetchImage.Request(url: request.url, download: request.download)
         articlesWorker.fetchImage(request: req, success: { response in
             let resp = ListArticle.FetchImage.Response(index: request.index, image: response.image, isError: response.isError)
             self.presenter?.presentArticleImage(response: resp)
