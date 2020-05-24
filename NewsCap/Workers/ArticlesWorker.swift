@@ -17,7 +17,7 @@ class ArticlesWorker
     var operationQueue = OperationQueue()
     
     init() {
-        operationQueue.maxConcurrentOperationCount = 1
+        operationQueue.maxConcurrentOperationCount = 3
     }
     
     func fetch(success:@escaping(responseHandler), fail:@escaping(responseHandler))
