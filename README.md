@@ -11,5 +11,6 @@ With Clean Swift Architecture
 - Alamofire to fetch news and images
   - Asynchronous fetch for images using OperationQueue
   - Download in priority image when showing a specific article
+  - Image cache
 - Show Article
   - ScrollView
