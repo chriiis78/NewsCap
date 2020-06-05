@@ -12,32 +12,33 @@
 
 import UIKit
 
-@objc protocol ListArticleRoutingLogic
-{
+@objc protocol ListArticleRoutingLogic {
   func routeToShowArticle(segue: UIStoryboardSegue?)
 }
 
-protocol ListArticleDataPassing
-{
+protocol ListArticleDataPassing {
   var dataStore: ListArticleDataStore? { get }
 }
 
-class ListArticleRouter: NSObject, ListArticleRoutingLogic, ListArticleDataPassing
-{
+class ListArticleRouter: NSObject, ListArticleRoutingLogic, ListArticleDataPassing {
   weak var viewController: ListArticleViewController?
   var dataStore: ListArticleDataStore?
-  
+
   // MARK: Routing
-  
-  func routeToShowArticle(segue: UIStoryboardSegue?)
-  {
+
+  func routeToShowArticle(segue: UIStoryboardSegue?) {
     if let segue = segue {
-      let destinationVC = segue.destination as! ShowArticleViewController
+        guard let destinationVC = segue.destination as? ShowArticleViewController else {
+            return
+        }
       var destinationDS = destinationVC.router!.dataStore!
       passDataToShowArticle(source: dataStore!, destination: &destinationDS)
     } else {
       let storyboard = UIStoryboard(name: "Main", bundle: nil)
-      let destinationVC = storyboard.instantiateViewController(withIdentifier: "ShowArticleViewController") as! ShowArticleViewController
+        guard let destinationVC = storyboard.instantiateViewController(
+            withIdentifier: "ShowArticleViewController") as? ShowArticleViewController else {
+            return
+        }
       var destinationDS = destinationVC.router!.dataStore!
       passDataToShowArticle(source: dataStore!, destination: &destinationDS)
       navigateToShowArticle(source: viewController!, destination: destinationVC)
@@ -45,16 +46,14 @@ class ListArticleRouter: NSObject, ListArticleRoutingLogic, ListArticleDataPassi
   }
 
   // MARK: Navigation
-  
-  func navigateToShowArticle(source: ListArticleViewController, destination: ShowArticleViewController)
-  {
+
+  func navigateToShowArticle(source: ListArticleViewController, destination: ShowArticleViewController) {
     source.show(destination, sender: nil)
   }
-  
+
   // MARK: Passing data
-  
-  func passDataToShowArticle(source: ListArticleDataStore, destination: inout ShowArticleDataStore)
-  {
+
+  func passDataToShowArticle(source: ListArticleDataStore, destination: inout ShowArticleDataStore) {
     let selectedRow = viewController?.tableView.indexPathForSelectedRow?.row
     destination.article = source.articles?[selectedRow!]
   }

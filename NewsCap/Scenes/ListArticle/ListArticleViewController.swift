@@ -12,35 +12,29 @@
 
 import UIKit
 
-protocol ListArticleDisplayLogic: class
-{
-    func displayArticles(viewModel: ListArticle.Fetch.ViewModel)
-    func displayArticleImage(viewModel: ListArticle.FetchImage.ViewModel)
+protocol ListArticleDisplayLogic: class {
+    func displayArticles(viewModel: ListArticle.FetchArticles.ViewModel)
 }
 
-class ListArticleViewController: UITableViewController, ListArticleDisplayLogic
-{
+class ListArticleViewController: UITableViewController, ListArticleDisplayLogic {
     var interactor: ListArticleBusinessLogic?
     var router: (NSObjectProtocol & ListArticleRoutingLogic & ListArticleDataPassing)?
-    
+
     // MARK: Object lifecycle
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-    {
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
     }
-    
-    required init?(coder aDecoder: NSCoder)
-    {
+
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
-    
+
     // MARK: Setup
-    
-    private func setup()
-    {
+
+    private func setup() {
         let viewController = self
         let interactor = ListArticleInteractor()
         let presenter = ListArticlePresenter()
@@ -52,11 +46,10 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic
         router.viewController = viewController
         router.dataStore = interactor
     }
-    
+
     // MARK: Routing
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-    {
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let scene = segue.identifier {
             let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
             if let router = router, router.responds(to: selector) {
@@ -64,114 +57,57 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic
             }
         }
     }
-    
+
     // MARK: View lifecycle
-    
-    override func viewDidLoad()
-    {
+
+    override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         fetchArticles()
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
         tableView.reloadData()
     }
-    
-    // MARK: List Article
+
     func setupUI() {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 270
     }
-    
-    var displayArticles = [ListArticle.Fetch.ViewModel.DisplayArticle]()
-    
-    func fetchArticles()
-    {
-        let request = ListArticle.Fetch.Request()
+
+    // MARK: List Article
+
+    var displayArticles = [ListArticle.FetchArticles.ViewModel.DisplayArticle]()
+
+    func fetchArticles() {
+        let request = ListArticle.FetchArticles.Request()
         interactor?.fetchArticles(request: request)
     }
-    
-    func displayArticles(viewModel: ListArticle.Fetch.ViewModel)
-    {
-        displayArticles = viewModel.DisplayArticles
+
+    func displayArticles(viewModel: ListArticle.FetchArticles.ViewModel) {
+        displayArticles = viewModel.displayArticles
         tableView.reloadData()
     }
-    
-    func displayArticleImage(viewModel: ListArticle.FetchImage.ViewModel) {
-        let indexPaths = [IndexPath(item: viewModel.index, section: 0)]
-        displayArticles[viewModel.index].image = viewModel.image
-        tableView.reloadRows(at: indexPaths, with: .fade)
-    }
-    
+
     // MARK: - Table view data source
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return displayArticles.count
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("cellForRowAt")
-        let cell = tableView.dequeueReusableCell(withIdentifier: "listArticleCell", for: indexPath) as! ListArticleTableViewCell
-        cell.setupData(data: displayArticles[indexPath.row], index: indexPath.row, interactor: interactor)
-        return cell
-    }
-    
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        if let cell = tableView.dequeueReusableCell(
+            withIdentifier: "listArticleCell",
+            for: indexPath) as? ListArticleTableViewCell {
+            cell.setupData(data: displayArticles[indexPath.row])
+            return cell
         }
+        return UITableViewCell()
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 }

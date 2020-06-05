@@ -12,47 +12,50 @@
 
 import UIKit
 
-protocol ListArticlePresentationLogic
-{
-    func presentArticles(response: ListArticle.Fetch.Response)
-    func presentArticleImage(response: ListArticle.FetchImage.Response)
+protocol ListArticlePresentationLogic {
+    func presentArticles(response: ListArticle.FetchArticles.Response)
+    //func presentArticleImage(response: ListArticle.FetchImage.Response)
 }
 
-class ListArticlePresenter: ListArticlePresentationLogic
-{
+class ListArticlePresenter: ListArticlePresentationLogic {
     weak var viewController: ListArticleDisplayLogic?
-    
+
     // MARK: Do something
-    
-    func presentArticles(response: ListArticle.Fetch.Response)
-    {
-        var displayArticles = [ListArticle.Fetch.ViewModel.DisplayArticle]()
-        
+
+    func presentArticles(response: ListArticle.FetchArticles.Response) {
+        var displayArticles = [ListArticle.FetchArticles.ViewModel.DisplayArticle]()
+
         for article in response.articles {
             let imageUrl = article.urlToImage ?? ""
             let title = article.title ?? ""
-            
+
             var description = ""
             if let desc = article.description, !desc.isEmpty {
                 description = desc
-            }
-            else {
+            } else {
                 description = article.content ?? ""
             }
-            
-            let displayArticle = ListArticle.Fetch.ViewModel.DisplayArticle(imageUrl: imageUrl, title: title, description: description)
+
+            let displayArticle = ListArticle.FetchArticles.ViewModel.DisplayArticle(
+                imageUrl: imageUrl,
+                title: title,
+                description: description)
             displayArticles.append(displayArticle)
         }
-        
-        let viewModel = ListArticle.Fetch.ViewModel(DisplayArticles: displayArticles, isError: response.isError, message: response.message)
+
+        let viewModel = ListArticle.FetchArticles.ViewModel(
+            displayArticles: displayArticles,
+            isError: response.isError,
+            message: response.message)
         viewController?.displayArticles(viewModel: viewModel)
     }
-    
+
+    /*
     func presentArticleImage(response: ListArticle.FetchImage.Response) {
         
         let viewModel = ListArticle.FetchImage.ViewModel(index: response.index, image: response.image)
         
         viewController?.displayArticleImage(viewModel: viewModel)
     }
+ */
 }
-

@@ -12,39 +12,36 @@
 
 import UIKit
 
-protocol ShowArticleBusinessLogic
-{
+protocol ShowArticleBusinessLogic {
     func getArticle(request: ShowArticle.GetArticle.Request)
     func fetchArticleImage(request: ShowArticle.FetchImage.Request)
 }
 
-protocol ShowArticleDataStore
-{
+protocol ShowArticleDataStore {
     var article: Article! { get set }
 }
 
-class ShowArticleInteractor: ShowArticleBusinessLogic, ShowArticleDataStore
-{
+class ShowArticleInteractor: ShowArticleBusinessLogic, ShowArticleDataStore {
     var article: Article!
-    
+
     var presenter: ShowArticlePresentationLogic?
     var worker: ShowArticleWorker?
     var articlesWorker = ArticlesWorker()
-    
+
     // MARK: Do something
-    
-    func getArticle(request: ShowArticle.GetArticle.Request)
-    {
+
+    func getArticle(request: ShowArticle.GetArticle.Request) {
         let response = ShowArticle.GetArticle.Response(article: article)
         presenter?.presentArticle(response: response)
-        
+
+        /*
         if let url = article.urlToImage {
             fetchArticleImage(request: ShowArticle.FetchImage.Request(url: url))
         }
+         */
     }
-    
-    func fetchArticleImage(request: ShowArticle.FetchImage.Request)
-    {
+
+    func fetchArticleImage(request: ShowArticle.FetchImage.Request) {
         let req = ArticlesModel.FetchImage.Request(url: request.url, priority: .high)
         articlesWorker.fetchImage(request: req, success: { response in
             let resp = ShowArticle.FetchImage.Response(image: response.image, isError: response.isError)

@@ -7,7 +7,8 @@ target 'NewsCap' do
 
   # Pods for NewsCap
   pod 'Alamofire', '~> 5.1'
-  pod 'SwiftyJSON', '~> 4.0'
+  pod 'AlamofireImage', '~> 4.1'
+  #pod 'SwiftyJSON', '~> 4.0'
 
   target 'NewsCapTests' do
     inherit! :search_paths

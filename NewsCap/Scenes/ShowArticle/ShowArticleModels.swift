@@ -12,22 +12,17 @@
 
 import UIKit
 
-enum ShowArticle
-{
+enum ShowArticle {
     // MARK: Use cases
-    
-    enum GetArticle
-    {
-        struct Request
-        {
+
+    enum GetArticle {
+        struct Request {
         }
-        struct Response
-        {
+        struct Response {
             var article: Article
         }
-        struct ViewModel
-        {
-            var imageUrl: String?
+        struct ViewModel {
+            var imageUrl: String
             var title: String
             var publish: String
             var author: String
@@ -36,21 +31,17 @@ enum ShowArticle
             var sourceURL: URL?
         }
     }
-    
-    enum FetchImage
-    {
-        struct Request
-        {
+
+    enum FetchImage {
+        struct Request {
             var url: String
         }
-        struct Response
-        {
+        struct Response {
             var image: UIImage?
             var isError: Bool
             var message: String?
         }
-        struct ViewModel
-        {
+        struct ViewModel {
             var image: UIImage?
         }
     }

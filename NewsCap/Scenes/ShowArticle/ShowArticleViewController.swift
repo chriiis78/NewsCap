@@ -11,36 +11,32 @@
 //
 
 import UIKit
+import AlamofireImage
 
-protocol ShowArticleDisplayLogic: class
-{
+protocol ShowArticleDisplayLogic: class {
     func displayArticle(viewModel: ShowArticle.GetArticle.ViewModel)
     func displayArticleImage(viewModel: ShowArticle.FetchImage.ViewModel)
 }
 
-class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic
-{
+class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic {
     var interactor: ShowArticleBusinessLogic?
     var router: (NSObjectProtocol & ShowArticleRoutingLogic & ShowArticleDataPassing)?
-    
+
     // MARK: Object lifecycle
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-    {
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
     }
-    
-    required init?(coder aDecoder: NSCoder)
-    {
+
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
-    
+
     // MARK: Setup
-    
-    private func setup()
-    {
+
+    private func setup() {
         let viewController = self
         let interactor = ShowArticleInteractor()
         let presenter = ShowArticlePresenter()
@@ -52,11 +48,10 @@ class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic
         router.viewController = viewController
         router.dataStore = interactor
     }
-    
+
     // MARK: Routing
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-    {
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let scene = segue.identifier {
             let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
             if let router = router, router.responds(to: selector) {
@@ -64,7 +59,7 @@ class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic
             }
         }
     }
-    
+
     // MARK: View lifecycle
     @IBOutlet weak var articleImage: UIImageView!
     @IBOutlet weak var titleText: UITextView!
@@ -72,45 +67,44 @@ class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic
     @IBOutlet weak var authorText: UILabel!
     @IBOutlet weak var contentText: UILabel!
     @IBOutlet weak var sourceText: UILabel!
-    
-    override func viewDidLoad()
-    {
+
+    override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         fetchArticle()
     }
-    
+
     // MARK: Show Article
-    
+
     func setupUI() {
         titleText.layer.shadowOpacity = 1.0
         titleText.layer.shadowOffset = CGSize(width: 0, height: 0)
         titleText.layer.shadowRadius = 10
         titleText.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        
+
         publishText.layer.shadowOpacity = 1.0
         publishText.layer.shadowOffset = CGSize(width: 0, height: 0)
         publishText.layer.shadowRadius = 3
         publishText.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
-    
-    func fetchArticle()
-    {
+
+    func fetchArticle() {
         let request = ShowArticle.GetArticle.Request()
         interactor?.getArticle(request: request)
     }
-    
-    func displayArticle(viewModel: ShowArticle.GetArticle.ViewModel)
-    {
+
+    func displayArticle(viewModel: ShowArticle.GetArticle.ViewModel) {
         titleText.text = viewModel.title
         publishText.text = viewModel.publish
         authorText.text = viewModel.author
         contentText.text = viewModel.content
         sourceText.text = viewModel.source
+        if let url = URL(string: viewModel.imageUrl) {
+            articleImage.af.setImage(withURL: url)
+        }
     }
-    
-    func displayArticleImage(viewModel: ShowArticle.FetchImage.ViewModel)
-    {
+
+    func displayArticleImage(viewModel: ShowArticle.FetchImage.ViewModel) {
         articleImage.image = viewModel.image
     }
 }

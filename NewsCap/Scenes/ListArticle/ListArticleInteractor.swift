@@ -12,63 +12,47 @@
 
 import UIKit
 
-protocol ListArticleBusinessLogic
-{
-    func fetchArticles(request: ListArticle.Fetch.Request)
-    func fetchArticleImage(request: ListArticle.FetchImage.Request)
+protocol ListArticleBusinessLogic {
+    func fetchArticles(request: ListArticle.FetchArticles.Request)
+    //var filteredArticles: [Article] { get set }
 }
 
-protocol ListArticleDataStore
-{
-    //var name: String { get set }
+protocol ListArticleDataStore {
     var articles: [Article]? { get }
 }
 
-class ListArticleInteractor: ListArticleBusinessLogic, ListArticleDataStore
-{
+class ListArticleInteractor: ListArticleBusinessLogic, ListArticleDataStore {
+    //var filteredArticles: [Article] = []
     var articles: [Article]?
-    
-    var presenter: ListArticlePresentationLogic?
-    var worker: ListArticleWorker?
-    var articlesWorker = ArticlesWorker()
-    //var name: String = ""
-    
-    // MARK: Do something
-    
-    func fetchArticles(request: ListArticle.Fetch.Request)
-    {
-        articlesWorker.fetch(success: { response in
-            self.articles = response.articles
-            let resp = ListArticle.Fetch.Response(articles: response.articles, isError: response.isError, message: response.message)
-            self.presenter?.presentArticles(response: resp)
-            self.fetchArticlesImage()
-        }, fail: { error in
-            let resp = ListArticle.Fetch.Response(articles: [], isError: error.isError, message: error.message)
-            self.presenter?.presentArticles(response: resp)
-        })
-    }
-    
-    func fetchArticlesImage()
-    {
-        if let articles = articles {
-            for (index, article) in articles.enumerated() {
-                if let url = article.urlToImage {
-                    let request = ListArticle.FetchImage.Request(index: index, url: url)
-                    fetchArticleImage(request: request)
-                }
+    /*{
+        didSet {
+            if let articles = articles {
+                filteredArticles = articles
             }
         }
     }
-    
-    func fetchArticleImage(request: ListArticle.FetchImage.Request)
-    {
-        let req = ArticlesModel.FetchImage.Request(url: request.url, download: request.download)
-        articlesWorker.fetchImage(request: req, success: { response in
-            let resp = ListArticle.FetchImage.Response(index: request.index, image: response.image, isError: response.isError)
-            self.presenter?.presentArticleImage(response: resp)
+    */
+    var presenter: ListArticlePresentationLogic?
+    var worker: ListArticleWorker?
+    var articlesWorker = ArticlesWorker()
+
+    // MARK: List Articles
+
+    func fetchArticles(request: ListArticle.FetchArticles.Request) {
+        articlesWorker.fetch(success: { response in
+            self.articles = response.articles
+            let resp = ListArticle.FetchArticles.Response(
+                articles: response.articles,
+                isError: response.isError,
+                message: response.message)
+            self.presenter?.presentArticles(response: resp)
+            //self.fetchArticlesImage()
         }, fail: { error in
-            let resp = ListArticle.FetchImage.Response(index: request.index, isError: error.isError, message: error.message)
-            self.presenter?.presentArticleImage(response: resp)
+            let resp = ListArticle.FetchArticles.Response(
+                articles: [],
+                isError: error.isError,
+                message: error.message)
+            self.presenter?.presentArticles(response: resp)
         })
     }
 }

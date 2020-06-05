@@ -12,23 +12,20 @@
 
 import UIKit
 
-@objc protocol ShowArticleRoutingLogic
-{
+@objc protocol ShowArticleRoutingLogic {
   //func routeToSomewhere(segue: UIStoryboardSegue?)
 }
 
-protocol ShowArticleDataPassing
-{
+protocol ShowArticleDataPassing {
   var dataStore: ShowArticleDataStore? { get }
 }
 
-class ShowArticleRouter: NSObject, ShowArticleRoutingLogic, ShowArticleDataPassing
-{
+class ShowArticleRouter: NSObject, ShowArticleRoutingLogic, ShowArticleDataPassing {
   weak var viewController: ShowArticleViewController?
   var dataStore: ShowArticleDataStore?
-  
+
   // MARK: Routing
-  
+
   //func routeToSomewhere(segue: UIStoryboardSegue?)
   //{
   //  if let segue = segue {
@@ -37,7 +34,8 @@ class ShowArticleRouter: NSObject, ShowArticleRoutingLogic, ShowArticleDataPassi
   //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
   //  } else {
   //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
+  //    let destinationVC = storyboard.instantiateViewController(
+  //  withIdentifier: "SomewhereViewController") as! SomewhereViewController
   //    var destinationDS = destinationVC.router!.dataStore!
   //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
   //    navigateToSomewhere(source: viewController!, destination: destinationVC)
@@ -45,14 +43,14 @@ class ShowArticleRouter: NSObject, ShowArticleRoutingLogic, ShowArticleDataPassi
   //}
 
   // MARK: Navigation
-  
+
   //func navigateToSomewhere(source: ShowArticleViewController, destination: SomewhereViewController)
   //{
   //  source.show(destination, sender: nil)
   //}
-  
+
   // MARK: Passing data
-  
+
   //func passDataToSomewhere(source: ShowArticleDataStore, destination: inout SomewhereDataStore)
   //{
   //  destination.name = source.name

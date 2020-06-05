@@ -8,31 +8,23 @@
 
 import UIKit
 
-struct ArticlesModel
-{
-    enum Fetch
-    {
-        struct Request
-        {
-            
+struct ArticlesModel {
+    enum Fetch {
+        struct Request {
         }
-        struct Response
-        {
+        struct Response {
             var articles: [Article]
             var isError: Bool
             var message: String?
         }
     }
-    enum FetchImage
-    {
-        struct Request
-        {
+    enum FetchImage {
+        struct Request {
             var url: String
             var priority: Operation.QueuePriority = .normal
             var download: Bool = true
         }
-        struct Response
-        {
+        struct Response {
             var imageUrl: String?
             var image: UIImage?
             var isError: Bool

@@ -12,53 +12,58 @@
 
 import UIKit
 
-enum ListArticle
-{
+enum ListArticle {
     // MARK: Use cases
-    
-    enum Fetch
-    {
-        struct Request
-        {
+
+    enum FetchArticles {
+        struct Request {
         }
-        struct Response
-        {
+        struct Response {
             var articles: [Article]
             var isError: Bool
             var message: String?
         }
-        struct ViewModel
-        {
+        struct ViewModel {
             struct DisplayArticle {
                 var imageUrl: String
                 var image: UIImage?
                 var title: String
                 var description: String
             }
-            var DisplayArticles: [DisplayArticle]
+            var displayArticles: [DisplayArticle]
             var isError: Bool
             var message: String?
             var isImageSet: Bool = false
         }
     }
-    
-    enum FetchImage
-    {
-        struct Request
-        {
+
+    enum FetchArticle {
+        struct Request {
+            var at: Int
+        }
+        struct Response {
+            var article: Article
+        }
+        struct ViewModel {
+            var imageUrl: String
+            var title: String
+            var description: String
+        }
+    }
+
+    enum FetchImage {
+        struct Request {
             var index: Int
             var url: String
             var download: Bool = true
         }
-        struct Response
-        {
+        struct Response {
             var index: Int
             var image: UIImage?
             var isError: Bool
             var message: String?
         }
-        struct ViewModel
-        {
+        struct ViewModel {
             var index: Int
             var image: UIImage?
         }

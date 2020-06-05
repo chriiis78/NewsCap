@@ -12,41 +12,38 @@
 
 import UIKit
 
-protocol ShowArticlePresentationLogic
-{
+protocol ShowArticlePresentationLogic {
     func presentArticle(response: ShowArticle.GetArticle.Response)
     func presentArticleImage(response: ShowArticle.FetchImage.Response)
 }
 
-class ShowArticlePresenter: ShowArticlePresentationLogic
-{
+class ShowArticlePresenter: ShowArticlePresentationLogic {
     weak var viewController: ShowArticleDisplayLogic?
-    
+
     // MARK: Do something
-    
+
     var dayFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .none
         return dateFormatter
     }
-    
+
     var timeFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .none
         dateFormatter.timeStyle = .medium
         return dateFormatter
     }
-    
+
     var dateDeformatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         return dateFormatter
     }
-    
-    func presentArticle(response: ShowArticle.GetArticle.Response)
-    {
+
+    func presentArticle(response: ShowArticle.GetArticle.Response) {
         let title = response.article.title ?? ""
         var publish = ""
         if let date = response.article.publishedAt,
@@ -58,15 +55,22 @@ class ShowArticlePresenter: ShowArticlePresentationLogic
         let author = response.article.author.map { "Auteur : \($0)" } ?? ""
         let content = response.article.content ?? ""
         let source = response.article.source?.name.map { "Source : \($0)" } ?? ""
-        
-        let viewModel = ShowArticle.GetArticle.ViewModel(title: title, publish: publish, author: author, content: content, source: source)
+        let imageUrl = response.article.urlToImage ?? ""
+
+        let viewModel = ShowArticle.GetArticle.ViewModel(
+            imageUrl: imageUrl,
+            title: title,
+            publish: publish,
+            author: author,
+            content: content,
+            source: source)
         viewController?.displayArticle(viewModel: viewModel)
     }
-    
+
     func presentArticleImage(response: ShowArticle.FetchImage.Response) {
-        
+
         let viewModel = ShowArticle.FetchImage.ViewModel(image: response.image)
-        
+
         viewController?.displayArticleImage(viewModel: viewModel)
     }
 }
