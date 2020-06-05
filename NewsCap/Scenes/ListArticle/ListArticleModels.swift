@@ -36,36 +36,4 @@ enum ListArticle {
             var isImageSet: Bool = false
         }
     }
-
-    enum FetchArticle {
-        struct Request {
-            var at: Int
-        }
-        struct Response {
-            var article: Article
-        }
-        struct ViewModel {
-            var imageUrl: String
-            var title: String
-            var description: String
-        }
-    }
-
-    enum FetchImage {
-        struct Request {
-            var index: Int
-            var url: String
-            var download: Bool = true
-        }
-        struct Response {
-            var index: Int
-            var image: UIImage?
-            var isError: Bool
-            var message: String?
-        }
-        struct ViewModel {
-            var index: Int
-            var image: UIImage?
-        }
-    }
 }

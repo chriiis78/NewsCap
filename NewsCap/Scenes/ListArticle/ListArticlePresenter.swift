@@ -14,13 +14,12 @@ import UIKit
 
 protocol ListArticlePresentationLogic {
     func presentArticles(response: ListArticle.FetchArticles.Response)
-    //func presentArticleImage(response: ListArticle.FetchImage.Response)
 }
 
 class ListArticlePresenter: ListArticlePresentationLogic {
     weak var viewController: ListArticleDisplayLogic?
 
-    // MARK: Do something
+    // MARK: Present Articles
 
     func presentArticles(response: ListArticle.FetchArticles.Response) {
         var displayArticles = [ListArticle.FetchArticles.ViewModel.DisplayArticle]()
@@ -49,13 +48,4 @@ class ListArticlePresenter: ListArticlePresentationLogic {
             message: response.message)
         viewController?.displayArticles(viewModel: viewModel)
     }
-
-    /*
-    func presentArticleImage(response: ListArticle.FetchImage.Response) {
-        
-        let viewModel = ListArticle.FetchImage.ViewModel(index: response.index, image: response.image)
-        
-        viewController?.displayArticleImage(viewModel: viewModel)
-    }
- */
 }

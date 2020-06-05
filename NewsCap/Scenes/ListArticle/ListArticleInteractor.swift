@@ -46,7 +46,6 @@ class ListArticleInteractor: ListArticleBusinessLogic, ListArticleDataStore {
                 isError: response.isError,
                 message: response.message)
             self.presenter?.presentArticles(response: resp)
-            //self.fetchArticlesImage()
         }, fail: { error in
             let resp = ListArticle.FetchArticles.Response(
                 articles: [],

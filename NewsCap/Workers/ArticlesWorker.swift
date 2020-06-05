@@ -10,14 +10,8 @@ import UIKit
 import Alamofire
 
 typealias ResponseHandler = (_ response:ArticlesModel.Fetch.Response) -> Void
-typealias ImageResponseHandler = (_ response:ArticlesModel.FetchImage.Response) -> Void
 
 class ArticlesWorker {
-    var operationQueue = OperationQueue()
-
-    init() {
-        operationQueue.maxConcurrentOperationCount = 3
-    }
 
     func fetch(success:@escaping(ResponseHandler), fail:@escaping(ResponseHandler)) {
         guard let apiUrl = Bundle.main.infoDictionary?["NEWSAPI_URL"] as? String,
@@ -67,43 +61,6 @@ class ArticlesWorker {
                     isError: true,
                     message: error.errorDescription))
             }
-        }
-    }
-
-    func fetchImage(request: ArticlesModel.FetchImage.Request,
-                    success:@escaping(ImageResponseHandler),
-                    fail:@escaping(ImageResponseHandler)) {
-
-        let fileManager = FileManager.default
-        let documentURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let pathComponent = documentURL.appendingPathComponent(request.url)
-        let filePath = pathComponent.path
-        print("fileName \(filePath)")
-
-        if fileManager.fileExists(atPath: filePath) {
-            print("FILE AVAILABLE")
-            if let image = UIImage(contentsOfFile: filePath) {
-                success(ArticlesModel.FetchImage.Response(
-                    imageUrl: request.url,
-                    image: image,
-                    isError: false))
-            } else {
-                fail(ArticlesModel.FetchImage.Response(isError: true, message: "no image found"))
-            }
-        } else if request.download {
-            print("DOWNLOAD FILE \(filePath)")
-
-            let imageOperation = ImageOperation(url: request.url, path: pathComponent)
-            imageOperation.queuePriority = request.priority
-            imageOperation.completionBlock = {
-                print("completionBlock \(filePath)")
-                if let response = imageOperation.imageResponse {
-                    DispatchQueue.main.async {
-                        success(response)
-                    }
-                }
-            }
-            operationQueue.addOperation(imageOperation)
         }
     }
 }

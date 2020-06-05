@@ -14,7 +14,6 @@ import UIKit
 
 protocol ShowArticleBusinessLogic {
     func getArticle(request: ShowArticle.GetArticle.Request)
-    func fetchArticleImage(request: ShowArticle.FetchImage.Request)
 }
 
 protocol ShowArticleDataStore {
@@ -28,27 +27,10 @@ class ShowArticleInteractor: ShowArticleBusinessLogic, ShowArticleDataStore {
     var worker: ShowArticleWorker?
     var articlesWorker = ArticlesWorker()
 
-    // MARK: Do something
+    // MARK: Get Article
 
     func getArticle(request: ShowArticle.GetArticle.Request) {
         let response = ShowArticle.GetArticle.Response(article: article)
         presenter?.presentArticle(response: response)
-
-        /*
-        if let url = article.urlToImage {
-            fetchArticleImage(request: ShowArticle.FetchImage.Request(url: url))
-        }
-         */
-    }
-
-    func fetchArticleImage(request: ShowArticle.FetchImage.Request) {
-        let req = ArticlesModel.FetchImage.Request(url: request.url, priority: .high)
-        articlesWorker.fetchImage(request: req, success: { response in
-            let resp = ShowArticle.FetchImage.Response(image: response.image, isError: response.isError)
-            self.presenter?.presentArticleImage(response: resp)
-        }, fail: { error in
-            let resp = ShowArticle.FetchImage.Response(isError: error.isError, message: error.message)
-            self.presenter?.presentArticleImage(response: resp)
-        })
     }
 }

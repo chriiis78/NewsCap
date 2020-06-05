@@ -14,13 +14,12 @@ import UIKit
 
 protocol ShowArticlePresentationLogic {
     func presentArticle(response: ShowArticle.GetArticle.Response)
-    func presentArticleImage(response: ShowArticle.FetchImage.Response)
 }
 
 class ShowArticlePresenter: ShowArticlePresentationLogic {
     weak var viewController: ShowArticleDisplayLogic?
 
-    // MARK: Do something
+    // MARK: Present Article
 
     var dayFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
@@ -65,12 +64,5 @@ class ShowArticlePresenter: ShowArticlePresentationLogic {
             content: content,
             source: source)
         viewController?.displayArticle(viewModel: viewModel)
-    }
-
-    func presentArticleImage(response: ShowArticle.FetchImage.Response) {
-
-        let viewModel = ShowArticle.FetchImage.ViewModel(image: response.image)
-
-        viewController?.displayArticleImage(viewModel: viewModel)
     }
 }

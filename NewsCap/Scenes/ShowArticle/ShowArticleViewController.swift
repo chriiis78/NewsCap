@@ -15,7 +15,6 @@ import AlamofireImage
 
 protocol ShowArticleDisplayLogic: class {
     func displayArticle(viewModel: ShowArticle.GetArticle.ViewModel)
-    func displayArticleImage(viewModel: ShowArticle.FetchImage.ViewModel)
 }
 
 class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic {
@@ -102,9 +101,5 @@ class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic {
         if let url = URL(string: viewModel.imageUrl) {
             articleImage.af.setImage(withURL: url)
         }
-    }
-
-    func displayArticleImage(viewModel: ShowArticle.FetchImage.ViewModel) {
-        articleImage.image = viewModel.image
     }
 }

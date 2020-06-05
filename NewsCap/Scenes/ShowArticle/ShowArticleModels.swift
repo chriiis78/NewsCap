@@ -31,18 +31,4 @@ enum ShowArticle {
             var sourceURL: URL?
         }
     }
-
-    enum FetchImage {
-        struct Request {
-            var url: String
-        }
-        struct Response {
-            var image: UIImage?
-            var isError: Bool
-            var message: String?
-        }
-        struct ViewModel {
-            var image: UIImage?
-        }
-    }
 }
