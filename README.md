@@ -9,8 +9,7 @@ With Clean Swift Architecture
   - Custom Cell
   - Round and Shadow
 - Alamofire to fetch news and images
-  - Asynchronous fetch for images using OperationQueue
-  - Download in priority image when showing a specific article
+  - Asynchronous fetch for images using AlamofireImage
   - Image cache
 - Show Article
   - ScrollView
