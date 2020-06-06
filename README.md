@@ -13,3 +13,4 @@ With Clean Swift Architecture
   - Image cache
 - Show Article
   - ScrollView
+  - Open url in Safari

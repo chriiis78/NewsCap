@@ -13,45 +13,63 @@
 import UIKit
 
 protocol ListArticleBusinessLogic {
-    func fetchArticles(request: ListArticle.FetchArticles.Request)
+    func fetchArticles(request: ListArticle.Fetch.Request)
+    func filterArticles(request: ListArticle.Fetch.Request)
     //var filteredArticles: [Article] { get set }
 }
 
 protocol ListArticleDataStore {
-    var articles: [Article]? { get }
+    var articles: [Article] { get }
 }
 
 class ListArticleInteractor: ListArticleBusinessLogic, ListArticleDataStore {
-    //var filteredArticles: [Article] = []
-    var articles: [Article]?
-    /*{
+    var articles: [Article] = []
+    var listArticles: [Article]? {
         didSet {
-            if let articles = articles {
-                filteredArticles = articles
+            if let list = listArticles {
+                articles = list
             }
         }
     }
-    */
+
     var presenter: ListArticlePresentationLogic?
     var worker: ListArticleWorker?
     var articlesWorker = ArticlesWorker()
 
     // MARK: List Articles
 
-    func fetchArticles(request: ListArticle.FetchArticles.Request) {
+    func fetchArticles(request: ListArticle.Fetch.Request) {
         articlesWorker.fetch(success: { response in
-            self.articles = response.articles
-            let resp = ListArticle.FetchArticles.Response(
-                articles: response.articles,
+            self.listArticles = response.articles
+            let resp = ListArticle.Fetch.Response(
+                articles: self.articles,
                 isError: response.isError,
                 message: response.message)
             self.presenter?.presentArticles(response: resp)
         }, fail: { error in
-            let resp = ListArticle.FetchArticles.Response(
+            let resp = ListArticle.Fetch.Response(
                 articles: [],
                 isError: error.isError,
                 message: error.message)
             self.presenter?.presentArticles(response: resp)
         })
+    }
+
+    func filterArticles(request: ListArticle.Fetch.Request) {
+        if let filter = request.filter, let listArticles = listArticles {
+            if !filter.isEmpty {
+                articles = listArticles.filter {
+                $0.title?.contains(filter) ?? false ||
+                    $0.source?.name?.contains(filter) ?? false
+                }
+            } else {
+                articles = listArticles
+            }
+        }
+
+        let resp = ListArticle.Fetch.Response(
+            articles: self.articles,
+            isError: false)
+        self.presenter?.presentArticles(response: resp)
     }
 }

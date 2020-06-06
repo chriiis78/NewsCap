@@ -13,7 +13,7 @@
 import UIKit
 
 protocol ListArticlePresentationLogic {
-    func presentArticles(response: ListArticle.FetchArticles.Response)
+    func presentArticles(response: ListArticle.Fetch.Response)
 }
 
 class ListArticlePresenter: ListArticlePresentationLogic {
@@ -21,8 +21,8 @@ class ListArticlePresenter: ListArticlePresentationLogic {
 
     // MARK: Present Articles
 
-    func presentArticles(response: ListArticle.FetchArticles.Response) {
-        var displayArticles = [ListArticle.FetchArticles.ViewModel.DisplayArticle]()
+    func presentArticles(response: ListArticle.Fetch.Response) {
+        var displayArticles = [ListArticle.Fetch.ViewModel.DisplayArticle]()
 
         for article in response.articles {
             let imageUrl = article.urlToImage ?? ""
@@ -35,14 +35,14 @@ class ListArticlePresenter: ListArticlePresentationLogic {
                 description = article.content ?? ""
             }
 
-            let displayArticle = ListArticle.FetchArticles.ViewModel.DisplayArticle(
+            let displayArticle = ListArticle.Fetch.ViewModel.DisplayArticle(
                 imageUrl: imageUrl,
                 title: title,
                 description: description)
             displayArticles.append(displayArticle)
         }
 
-        let viewModel = ListArticle.FetchArticles.ViewModel(
+        let viewModel = ListArticle.Fetch.ViewModel(
             displayArticles: displayArticles,
             isError: response.isError,
             message: response.message)

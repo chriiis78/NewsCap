@@ -36,7 +36,7 @@ class ListArticleTableViewCell: UITableViewCell {
         titleText.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
 
-    func setupData(data: ListArticle.FetchArticles.ViewModel.DisplayArticle) {
+    func setupData(data: ListArticle.Fetch.ViewModel.DisplayArticle) {
         imageArticle.image = data.image
         titleText.text = data.title
         descriptionText.text = data.description

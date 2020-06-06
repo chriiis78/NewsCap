@@ -15,8 +15,9 @@ import UIKit
 enum ListArticle {
     // MARK: Use cases
 
-    enum FetchArticles {
+    enum Fetch {
         struct Request {
+            var filter: String?
         }
         struct Response {
             var articles: [Article]

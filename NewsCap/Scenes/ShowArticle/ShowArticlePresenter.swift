@@ -53,7 +53,7 @@ class ShowArticlePresenter: ShowArticlePresentationLogic {
         }
         let author = response.article.author.map { "Auteur : \($0)" } ?? ""
         let content = response.article.content ?? ""
-        let source = response.article.source?.name.map { "Source : \($0)" } ?? ""
+        let source = response.article.source?.name ?? ""
         let imageUrl = response.article.urlToImage ?? ""
 
         let viewModel = ShowArticle.GetArticle.ViewModel(

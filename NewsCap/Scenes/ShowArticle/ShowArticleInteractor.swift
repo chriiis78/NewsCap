@@ -14,6 +14,7 @@ import UIKit
 
 protocol ShowArticleBusinessLogic {
     func getArticle(request: ShowArticle.GetArticle.Request)
+    var article: Article! { get }
 }
 
 protocol ShowArticleDataStore {

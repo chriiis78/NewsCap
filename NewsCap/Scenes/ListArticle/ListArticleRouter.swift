@@ -55,6 +55,6 @@ class ListArticleRouter: NSObject, ListArticleRoutingLogic, ListArticleDataPassi
 
   func passDataToShowArticle(source: ListArticleDataStore, destination: inout ShowArticleDataStore) {
     let selectedRow = viewController?.tableView.indexPathForSelectedRow?.row
-    destination.article = source.articles?[selectedRow!]
+    destination.article = source.articles[selectedRow!]
   }
 }

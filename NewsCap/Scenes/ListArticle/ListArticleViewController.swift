@@ -13,10 +13,10 @@
 import UIKit
 
 protocol ListArticleDisplayLogic: class {
-    func displayArticles(viewModel: ListArticle.FetchArticles.ViewModel)
+    func displayArticles(viewModel: ListArticle.Fetch.ViewModel)
 }
 
-class ListArticleViewController: UITableViewController, ListArticleDisplayLogic {
+class ListArticleViewController: UITableViewController, ListArticleDisplayLogic, UISearchResultsUpdating {
     var interactor: ListArticleBusinessLogic?
     var router: (NSObjectProtocol & ListArticleRoutingLogic & ListArticleDataPassing)?
 
@@ -60,6 +60,8 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic 
 
     // MARK: View lifecycle
 
+    let searchController = UISearchController(searchResultsController: nil)
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -74,18 +76,24 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic 
     func setupUI() {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 270
+
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search News"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
     }
 
     // MARK: List Article
 
-    var displayArticles = [ListArticle.FetchArticles.ViewModel.DisplayArticle]()
+    var displayArticles = [ListArticle.Fetch.ViewModel.DisplayArticle]()
 
     func fetchArticles() {
-        let request = ListArticle.FetchArticles.Request()
+        let request = ListArticle.Fetch.Request()
         interactor?.fetchArticles(request: request)
     }
 
-    func displayArticles(viewModel: ListArticle.FetchArticles.ViewModel) {
+    func displayArticles(viewModel: ListArticle.Fetch.ViewModel) {
         displayArticles = viewModel.displayArticles
         tableView.reloadData()
     }
@@ -110,4 +118,12 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic 
         }
         return UITableViewCell()
     }
+
+    // MARK: - Search Bar Results Updating
+
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        interactor?.filterArticles(request: ListArticle.Fetch.Request(filter: searchBar.text))
+    }
+
 }

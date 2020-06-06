@@ -66,6 +66,13 @@ class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic {
     @IBOutlet weak var authorText: UILabel!
     @IBOutlet weak var contentText: UILabel!
     @IBOutlet weak var sourceText: UILabel!
+    @IBOutlet weak var sourceButton: UIButton!
+
+    @IBAction func showSource(_ sender: Any) {
+        if let url = URL(string: interactor?.article.url ?? "") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,7 +104,14 @@ class ShowArticleViewController: UIViewController, ShowArticleDisplayLogic {
         publishText.text = viewModel.publish
         authorText.text = viewModel.author
         contentText.text = viewModel.content
-        sourceText.text = viewModel.source
+        if !viewModel.source.isEmpty {
+            sourceText.isHidden = false
+            sourceButton.isHidden = false
+            sourceButton.setTitle(viewModel.source, for: .normal)
+        } else {
+            sourceText.isHidden = true
+            sourceButton.isHidden = true
+        }
         if let url = URL(string: viewModel.imageUrl) {
             articleImage.af.setImage(withURL: url)
         }
