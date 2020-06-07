@@ -20,21 +20,19 @@ enum ListArticle {
             var filter: String?
         }
         struct Response {
-            var articles: [Article]
-            var isError: Bool
-            var message: String?
+            var articles: [Article]?
+            var errorMessage: String?
         }
         struct ViewModel {
             struct DisplayArticle {
                 var imageUrl: String
-                var image: UIImage?
                 var title: String
                 var description: String
             }
             var displayArticles: [DisplayArticle]
-            var isError: Bool
-            var message: String?
-            var isImageSet: Bool = false
+            struct Error {
+                var errorMessage: String?
+            }
         }
     }
 }

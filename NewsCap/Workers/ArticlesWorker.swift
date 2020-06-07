@@ -20,9 +20,7 @@ class ArticlesWorker {
             let apiCountry = Bundle.main.infoDictionary?["NEWSAPI_COUNTRY"] as? String
             else {
                 print("error get API parameters")
-                fail(ArticlesModel.Fetch.Response(
-                    isError: true,
-                    message: "error get API parameters"))
+                fail(ArticlesModel.Fetch.Response(errorMessage: "error get API parameters"))
                 return
         }
 
@@ -38,7 +36,7 @@ class ArticlesWorker {
             switch response.result {
             case .success:
                 guard let json = response.data else {
-                    fail(ArticlesModel.Fetch.Response(isError: true, message: "error: no response data"))
+                    fail(ArticlesModel.Fetch.Response(errorMessage: "error: no response data"))
                     return
                 }
                 var articleResult: ArticleResult
@@ -46,20 +44,17 @@ class ArticlesWorker {
                     articleResult = try decoder.decode(ArticleResult.self, from: json)
                     if let articles = articleResult.articles {
                         success(ArticlesModel.Fetch.Response(
-                            articles: articles,
-                            isError: false,
-                            message: nil))
+                            articles: articles))
                     } else {
-                        fail(ArticlesModel.Fetch.Response(isError: true,
-                                                          message: "error: no article in data"))
+                        fail(ArticlesModel.Fetch.Response(errorMessage: "error: no article in data"))
                     }
                 } catch {
                     print(error.localizedDescription)
-                    fail(ArticlesModel.Fetch.Response(isError: true, message: error.localizedDescription))
+                    fail(ArticlesModel.Fetch.Response(errorMessage: error.localizedDescription))
                 }
             case let .failure(error):
                 print(error)
-                fail(ArticlesModel.Fetch.Response(isError: true, message: error.errorDescription))
+                fail(ArticlesModel.Fetch.Response(errorMessage: error.errorDescription))
             }
         }
     }

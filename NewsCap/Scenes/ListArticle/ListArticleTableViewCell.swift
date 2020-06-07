@@ -37,15 +37,10 @@ class ListArticleTableViewCell: UITableViewCell {
     }
 
     func setupData(data: ListArticle.Fetch.ViewModel.DisplayArticle) {
-        imageArticle.image = data.image
         titleText.text = data.title
         descriptionText.text = data.description
-        if let image = data.image {
-            imageArticle.image = image
-        } else {
-            if let url = URL(string: data.imageUrl) {
-                imageArticle.af.setImage(withURL: url)
-            }
+        if let url = URL(string: data.imageUrl) {
+            imageArticle.af.setImage(withURL: url)
         }
     }
 }

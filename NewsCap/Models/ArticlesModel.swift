@@ -14,8 +14,7 @@ struct ArticlesModel {
         }
         struct Response {
             var articles: [Article]?
-            var isError: Bool
-            var message: String?
+            var errorMessage: String?
         }
     }
 }

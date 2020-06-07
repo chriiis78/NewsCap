@@ -14,6 +14,7 @@ import UIKit
 
 protocol ListArticleDisplayLogic: class {
     func displayArticles(viewModel: ListArticle.Fetch.ViewModel)
+    func displayError(viewModel: ListArticle.Fetch.ViewModel.Error)
 }
 
 class ListArticleViewController: UITableViewController, ListArticleDisplayLogic, UISearchResultsUpdating {
@@ -101,6 +102,13 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic,
     func displayArticles(viewModel: ListArticle.Fetch.ViewModel) {
         displayArticles = viewModel.displayArticles
         tableView.reloadData()
+    }
+
+    func displayError(viewModel: ListArticle.Fetch.ViewModel.Error) {
+        let alert = UIAlertController(title: "Error", message: viewModel.errorMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString(
+            "OK", comment: "Default action"), style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 
     // MARK: - Table view data source

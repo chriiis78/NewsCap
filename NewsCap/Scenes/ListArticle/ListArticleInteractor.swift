@@ -42,16 +42,11 @@ class ListArticleInteractor: ListArticleBusinessLogic, ListArticleDataStore {
         articlesWorker.fetch(success: { response in
             self.listArticles = response.articles
             let resp = ListArticle.Fetch.Response(
-                articles: self.articles,
-                isError: response.isError,
-                message: response.message)
+                articles: self.articles)
             self.presenter?.presentArticles(response: resp)
         }, fail: { error in
-            let resp = ListArticle.Fetch.Response(
-                articles: [],
-                isError: error.isError,
-                message: error.message)
-            self.presenter?.presentArticles(response: resp)
+            let resp = ListArticle.Fetch.Response(errorMessage: error.errorMessage)
+            self.presenter?.presentError(response: resp)
         })
     }
 
@@ -68,8 +63,7 @@ class ListArticleInteractor: ListArticleBusinessLogic, ListArticleDataStore {
         }
 
         let resp = ListArticle.Fetch.Response(
-            articles: self.articles,
-            isError: false)
+            articles: self.articles)
         self.presenter?.presentArticles(response: resp)
     }
 }

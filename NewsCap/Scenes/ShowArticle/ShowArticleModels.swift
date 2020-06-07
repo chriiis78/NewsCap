@@ -28,7 +28,6 @@ enum ShowArticle {
             var author: String
             var content: String
             var source: String
-            var sourceURL: URL?
         }
     }
 }

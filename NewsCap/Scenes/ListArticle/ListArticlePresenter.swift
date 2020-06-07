@@ -14,6 +14,7 @@ import UIKit
 
 protocol ListArticlePresentationLogic {
     func presentArticles(response: ListArticle.Fetch.Response)
+    func presentError(response: ListArticle.Fetch.Response)
 }
 
 class ListArticlePresenter: ListArticlePresentationLogic {
@@ -22,9 +23,12 @@ class ListArticlePresenter: ListArticlePresentationLogic {
     // MARK: Present Articles
 
     func presentArticles(response: ListArticle.Fetch.Response) {
+        guard let articles = response.articles else {
+            return
+        }
         var displayArticles = [ListArticle.Fetch.ViewModel.DisplayArticle]()
 
-        for article in response.articles {
+        for article in articles {
             let imageUrl = article.urlToImage ?? ""
             let title = article.title ?? ""
 
@@ -42,10 +46,13 @@ class ListArticlePresenter: ListArticlePresentationLogic {
             displayArticles.append(displayArticle)
         }
 
-        let viewModel = ListArticle.Fetch.ViewModel(
-            displayArticles: displayArticles,
-            isError: response.isError,
-            message: response.message)
+        let viewModel = ListArticle.Fetch.ViewModel(displayArticles: displayArticles)
         viewController?.displayArticles(viewModel: viewModel)
+    }
+
+    func presentError(response: ListArticle.Fetch.Response) {
+        let viewModel = ListArticle.Fetch.ViewModel.Error(
+            errorMessage: response.errorMessage ?? "Error Fetching Articles")
+        viewController?.displayError(viewModel: viewModel)
     }
 }
