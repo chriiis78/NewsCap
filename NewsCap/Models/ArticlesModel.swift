@@ -13,7 +13,7 @@ struct ArticlesModel {
         struct Request {
         }
         struct Response {
-            var articles: [Article]
+            var articles: [Article]?
             var isError: Bool
             var message: String?
         }

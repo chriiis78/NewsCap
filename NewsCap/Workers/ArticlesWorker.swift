@@ -21,7 +21,6 @@ class ArticlesWorker {
             else {
                 print("error get API parameters")
                 fail(ArticlesModel.Fetch.Response(
-                    articles: [],
                     isError: true,
                     message: "error get API parameters"))
                 return
@@ -32,19 +31,14 @@ class ArticlesWorker {
             "apiKey": apiKey
         ]
 
-        let request = AF.request(apiUrl,
-                                 method: .get,
-                                 parameters: parameters)
+        let request = AF.request(apiUrl, method: .get, parameters: parameters)
 
         request.responseData { response in
             let decoder = JSONDecoder()
             switch response.result {
             case .success:
                 guard let json = response.data else {
-                    fail(ArticlesModel.Fetch.Response(
-                    articles: [],
-                    isError: true,
-                    message: "error: no response data"))
+                    fail(ArticlesModel.Fetch.Response(isError: true, message: "error: no response data"))
                     return
                 }
                 var articleResult: ArticleResult
@@ -52,28 +46,20 @@ class ArticlesWorker {
                     articleResult = try decoder.decode(ArticleResult.self, from: json)
                     if let articles = articleResult.articles {
                         success(ArticlesModel.Fetch.Response(
-                        articles: articles,
-                        isError: false,
-                        message: nil))
+                            articles: articles,
+                            isError: false,
+                            message: nil))
                     } else {
-                        fail(ArticlesModel.Fetch.Response(
-                        articles: [],
-                        isError: true,
-                        message: "error: no article in data"))
+                        fail(ArticlesModel.Fetch.Response(isError: true,
+                                                          message: "error: no article in data"))
                     }
                 } catch {
                     print(error.localizedDescription)
-                    fail(ArticlesModel.Fetch.Response(
-                        articles: [],
-                        isError: true,
-                        message: error.localizedDescription))
+                    fail(ArticlesModel.Fetch.Response(isError: true, message: error.localizedDescription))
                 }
             case let .failure(error):
                 print(error)
-                fail(ArticlesModel.Fetch.Response(
-                    articles: [],
-                    isError: true,
-                    message: error.errorDescription))
+                fail(ArticlesModel.Fetch.Response(isError: true, message: error.errorDescription))
             }
         }
     }
