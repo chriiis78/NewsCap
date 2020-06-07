@@ -66,6 +66,11 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic,
         super.viewDidLoad()
         setupUI()
         fetchArticles()
+
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(self.keyboardWillDismiss),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -124,6 +129,12 @@ class ListArticleViewController: UITableViewController, ListArticleDisplayLogic,
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         interactor?.filterArticles(request: ListArticle.Fetch.Request(filter: searchBar.text))
+    }
+
+    @objc func keyboardWillDismiss() {
+        if let text = searchController.searchBar.text, text.isEmpty {
+            searchController.isActive = false
+        }
     }
 
 }

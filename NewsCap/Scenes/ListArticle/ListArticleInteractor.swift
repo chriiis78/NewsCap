@@ -59,8 +59,8 @@ class ListArticleInteractor: ListArticleBusinessLogic, ListArticleDataStore {
         if let filter = request.filter, let listArticles = listArticles {
             if !filter.isEmpty {
                 articles = listArticles.filter {
-                $0.title?.contains(filter) ?? false ||
-                    $0.source?.name?.contains(filter) ?? false
+                    $0.title?.lowercased().contains(filter.lowercased()) ?? false ||
+                        $0.source?.name?.lowercased().contains(filter.lowercased()) ?? false
                 }
             } else {
                 articles = listArticles

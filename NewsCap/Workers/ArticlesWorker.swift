@@ -9,11 +9,12 @@
 import UIKit
 import Alamofire
 
-typealias ResponseHandler = (_ response:ArticlesModel.Fetch.Response) -> Void
+typealias ResponseHandler = (_ response: ArticlesModel.Fetch.Response) -> Void
 
 class ArticlesWorker {
 
-    func fetch(success:@escaping(ResponseHandler), fail:@escaping(ResponseHandler)) {
+    func fetch(success: @escaping(ResponseHandler),
+               fail: @escaping(ResponseHandler)) {
         guard let apiUrl = Bundle.main.infoDictionary?["NEWSAPI_URL"] as? String,
             let apiKey = Bundle.main.infoDictionary?["NEWSAPI_KEY"] as? String,
             let apiCountry = Bundle.main.infoDictionary?["NEWSAPI_COUNTRY"] as? String
@@ -27,8 +28,8 @@ class ArticlesWorker {
         }
 
         let parameters: Parameters = [
-            "country" : apiCountry,
-            "apiKey" : apiKey
+            "country": apiCountry,
+            "apiKey": apiKey
         ]
 
         let request = AF.request(apiUrl,
@@ -39,14 +40,27 @@ class ArticlesWorker {
             let decoder = JSONDecoder()
             switch response.result {
             case .success:
-                let json = response.data!
+                guard let json = response.data else {
+                    fail(ArticlesModel.Fetch.Response(
+                    articles: [],
+                    isError: true,
+                    message: "error: no response data"))
+                    return
+                }
                 var articleResult: ArticleResult
                 do {
                     articleResult = try decoder.decode(ArticleResult.self, from: json)
-                    success(ArticlesModel.Fetch.Response(
-                        articles: articleResult.articles!,
+                    if let articles = articleResult.articles {
+                        success(ArticlesModel.Fetch.Response(
+                        articles: articles,
                         isError: false,
                         message: nil))
+                    } else {
+                        fail(ArticlesModel.Fetch.Response(
+                        articles: [],
+                        isError: true,
+                        message: "error: no article in data"))
+                    }
                 } catch {
                     print(error.localizedDescription)
                     fail(ArticlesModel.Fetch.Response(
