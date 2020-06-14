@@ -11,6 +11,18 @@ import XCTest
 
 class NewsCapTests: XCTestCase {
 
+    class MockListArticleViewController: ListArticleDisplayLogic {
+        func displayArticles(viewModel: ListArticle.Fetch.ViewModel) {
+        }
+
+        var displayErrorCalled = false
+        var displayErrorMessage: String?
+        func displayError(viewModel: ListArticle.Fetch.ViewModel.Error) {
+            displayErrorCalled = true
+            displayErrorMessage = viewModel.errorMessage
+        }
+    }
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -20,16 +32,13 @@ class NewsCapTests: XCTestCase {
         // invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
+    func testErrorMessage() throws {
+        let mock = MockListArticleViewController()
+        let presenter = NewsCap.ListArticlePresenter()
+        presenter.viewController = mock
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+        presenter.presentError(response: NewsCap.ListArticle.Fetch.Response(errorMessage: "Error"))
+        XCTAssertTrue(mock.displayErrorCalled)
+        XCTAssertEqual(mock.displayErrorMessage, "Error")
     }
-
 }

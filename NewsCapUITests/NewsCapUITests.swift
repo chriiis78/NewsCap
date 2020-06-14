@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import NewsCap
 
 class NewsCapUITests: XCTestCase {
 
@@ -26,13 +27,36 @@ class NewsCapUITests: XCTestCase {
         // of each test method in the class.
     }
 
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    func testShowArticle() throws {
         let app = XCUIApplication()
         app.launch()
 
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        app.tables.cells.element(boundBy: 0).tap()
+        XCUIApplication().navigationBars["NewsCap.ShowArticleView"].buttons["News"].press(forDuration: 0.5)
+
+        app.tables.cells.element(boundBy: 0).tap()
+        app.scrollViews.otherElements.buttons.element(boundBy: 0).tap()
+    }
+
+    func testSearch() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        let newsNavigationBar = app.navigationBars["News"]
+        let searchNewsSearchField = newsNavigationBar.searchFields["Search News"]
+        searchNewsSearchField.tap()
+
+        let cKey = app.keys["C"]
+        cKey.tap()
+
+        let oKey = app.keys["o"]
+        oKey.tap()
+        oKey.tap()
+
+        let deleteKey = app.keys["delete"]
+        deleteKey.tap()
+        searchNewsSearchField.buttons["Clear text"].tap()
+        newsNavigationBar.buttons["Cancel"].tap()
     }
 
     func testLaunchPerformance() throws {

@@ -754,6 +754,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 52VZ9Z6M3Y;
 				INFOPLIST_FILE = NewsCapTests/Info.plist;
@@ -777,6 +778,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 52VZ9Z6M3Y;
 				INFOPLIST_FILE = NewsCapTests/Info.plist;
@@ -799,15 +801,16 @@
 			baseConfigurationReference = 1BFB5F0F34EAA93980374644 /* Pods-NewsCap-NewsCapUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 52VZ9Z6M3Y;
+				DEVELOPMENT_TEAM = QJ38A6ZPR5;
 				INFOPLIST_FILE = NewsCapUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = Chris78.NewsCapUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = Chris78.NewsCapTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -820,15 +823,16 @@
 			baseConfigurationReference = 60AFC9ADF782D786AB4F7781 /* Pods-NewsCap-NewsCapUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 52VZ9Z6M3Y;
+				DEVELOPMENT_TEAM = QJ38A6ZPR5;
 				INFOPLIST_FILE = NewsCapUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = Chris78.NewsCapUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = Chris78.NewsCapTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
